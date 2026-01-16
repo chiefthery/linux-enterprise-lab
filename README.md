@@ -40,17 +40,17 @@ flowchart LR
   C["client1"]
   D["FreeIPA / IdM (ipa)"]
 
-  A -->|SSH + Ansible| B
-  A -->|SSH + Ansible| C
+  A -->|"SSH + Ansible"| B
+  A -->|"SSH + Ansible"| C
 
-  B -->|SSSD / Kerberos| D
-  C -->|SSSD / Kerberos| D
+  B -->|"SSSD / Kerberos"| D
+  C -->|"SSSD / Kerberos"| D
 
-  B -->|DNS queries| D
-  C -->|DNS queries| D
+  B -->|"DNS queries"| D
+  C -->|"DNS queries"| D
 
-  B -->|NTP (chrony)| D
-  C -->|NTP (chrony)| D```
+  B -->|"NTP (chrony)"| D
+  C -->|"NTP (chrony)"| D```
 
 ## How to Use This Repo
 1) Read the lab index
