@@ -32,6 +32,8 @@ It’s written like a runbook: **what I built, how to reproduce it, what broke, 
 - `vm4` (Automation): Ansible control node
 
 ### Diagram
+
+```mermaid
 flowchart LR
   A["Ansible Control Node (vm4)"]
   B["infra1"]
@@ -48,7 +50,7 @@ flowchart LR
   C -->|DNS queries| D
 
   B -->|NTP (chrony)| D
-  C -->|NTP (chrony)| D
+  C -->|NTP (chrony)| D```
 
 ## How to Use This Repo
 1) Read the lab index
