@@ -32,16 +32,23 @@ It’s written like a runbook: **what I built, how to reproduce it, what broke, 
 - `vm4` (Automation): Ansible control node
 
 ### Diagram
-```mermaid
 flowchart LR
-  A[Ansible Control Node\n(vm4)] -->|SSH/Ansible| B[infra1]
-  A -->|SSH/Ansible| C[client1]
-  B -->|SSSD/Kerberos| D[FreeIPA / IdM\n(ipa)]
-  C -->|SSSD/Kerberos| D
+  A["Ansible Control Node (vm4)"]
+  B["infra1"]
+  C["client1"]
+  D["FreeIPA / IdM (ipa)"]
+
+  A -->|SSH + Ansible| B
+  A -->|SSH + Ansible| C
+
+  B -->|SSSD / Kerberos| D
+  C -->|SSSD / Kerberos| D
+
   B -->|DNS queries| D
   C -->|DNS queries| D
-  B -->|NTP/Chrony| D
-  C -->|NTP/Chrony| D```
+
+  B -->|NTP (chrony)| D
+  C -->|NTP (chrony)| D
 
 ## How to Use This Repo
 1) Read the lab index
