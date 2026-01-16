@@ -1,0 +1,24 @@
+# Secrets / keys
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.kdb
+*.kdb.*
+*.pwd
+*.vault
+*.secrets
+secrets.yml
+
+# Inventory / host vars that may contain IPs or tokens (we'll sanitize later)
+ansible/inventory/**/host_vars/*
+ansible/inventory/**/group_vars/*
+
+# Logs / artifacts
+*.log
+*.retry
+*.tmp
+.DS_Store
+
