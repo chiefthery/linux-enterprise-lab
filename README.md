@@ -33,15 +33,16 @@ It’s written like a runbook: **what I built, how to reproduce it, what broke, 
 
 ### Diagram
 
-```mermaid
+```
+mermaid
 flowchart LR
   A["Ansible Control Node (vm4)"]
   B["infra1"]
   C["client1"]
   D["FreeIPA / IdM (ipa)"]
 
-  A -->|"SSH + Ansible"| B
-  A -->|"SSH + Ansible"| C
+  A -->|"SSH & Ansible"| B
+  A -->|"SSH & Ansible"| C
 
   B -->|"SSSD / Kerberos"| D
   C -->|"SSSD / Kerberos"| D
@@ -50,9 +51,13 @@ flowchart LR
   C -->|"DNS queries"| D
 
   B -->|"NTP (chrony)"| D
-  C -->|"NTP (chrony)"| D```
+  C -->|"NTP (chrony)"| D
+```
+
+
 
 ## How to Use This Repo
+
 1) Read the lab index
 
 See labs/00-index.md for the recommended path and prerequisites.
