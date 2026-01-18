@@ -33,8 +33,7 @@ It’s written like a runbook: **what I built, how to reproduce it, what broke, 
 
 ### Diagram
 
-```
-mermaid
+```mermaid
 flowchart LR
   A["Ansible Control Node (vm4)"]
   B["infra1"]
