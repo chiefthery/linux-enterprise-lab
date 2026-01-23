@@ -52,23 +52,29 @@ Goal: make troubleshooting fast and make hardening decisions obvious.
 - Query type: UDP 53 (and TCP 53 for larger responses / zone transfers)
 
 **Verify**
+
 `dig VM2 @VM1`
 - What it does: asks the IPA DNS server directly for the A record.
+
 `getent hosts infra1.lab.local`
 - What it does: checks the system’s name service switch path (DNS/SSSD/etc.) the same way apps do.
 
 ### B) Time sync (NTP / Chrony)
 **Who:** VM2/VM3/VM4 → time source (often VM1 or external)
+
 **Why:** Kerberos breaks if clocks drift (auth “fails” even when credentials are correct)
 
 **Verify**
+
 `chronyc sources -v`
 - What it does: shows which NTP sources you’re using and whether sync is healthy.
+
 `timedatectl`
 - What it does: confirms local time, NTP status, and sync state.
 
 ### C) Identity, auth, and access (SSSD + Kerberos + LDAP)
 **Who:** VM3/VM2/VM4 ↔ VM1
+
 **Why:** logins, sudo rules, SSH access, group membership, service tickets
 
 **Core components**
@@ -77,10 +83,13 @@ Goal: make troubleshooting fast and make hardening decisions obvious.
 - **SSSD**: the “translator/cache” on clients (talks to IPA, provides identity to Linux)
 
 **Verify**
+
 `ipa user-show <username>`
 - What it does: confirms the user exists in IPA (run on the IPA server or from a host with ipa client tools configured).
+
 `id <username>`
 - What it does: resolves user + groups through NSS/SSSD (this is what SSH + sudo depend on).
+
 `klist`
 - What it does: shows whether you have a valid Kerberos ticket (auth layer).
 
@@ -95,19 +104,26 @@ Goal: make troubleshooting fast and make hardening decisions obvious.
 - VM4 should have a clean, predictable path: DNS works → SSH works → sudo works
 
 **Verify**
+
 `ssh -vvv <user>@VM3
 - What it does: verbose SSH handshake; shows which key was offered, what auth method was used, and why it failed.
+
 `sssctl user-checks <username>`
 - What it does: checks SSSD health for the user (identity resolution, cache, policy). Great for “why can’t this user log in?” cases.
+
 `/usr/bin/sss_ssh_authorizedkeys <username>`
 - What it does: prints the SSH public keys SSSD believes are valid for that user (if you’re using IPA/SSSD to source keys).
 
 ### E) Certificate trust (IPA CA)
 **Who:** clients trust the IPA CA; services can present certs issued by IPA
+
 **Why:** TLS between internal services, secure LDAP, internal HTTPS, etc.
+
 **Verify**
+
 `trust list | head`
 - What it does: shows certificate trust stores and anchors (quick sanity check).`
+
 `openssl s_client -connect <host>:443 -servername <host> </dev/null`
 - What it does: inspects a live TLS endpoint and prints the cert chain.
 
@@ -203,6 +219,7 @@ Default stance: deny by default, then allow only the flows above.
 
 ## Diagram (ASCII)
 
+```
                   (Admin Plane)
                  SSH (22) / Ansible
         +----------------------------------+
@@ -221,4 +238,5 @@ Default stance: deny by default, then allow only the flows above.
         | (Human access)
       Laptop
        SSH 22 (and 80/443 if apps)
+```
 
