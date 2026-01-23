@@ -80,7 +80,7 @@ In an identity-based environment (FreeIPA / Kerberos), even small time drift bre
 
 ## Fix
 
-1) Ensured correct chrony configuration
+1) Ensured correct chrony configuration (reformatted time sync architecture)
 
 2) Verified network reachability to time sources
 
