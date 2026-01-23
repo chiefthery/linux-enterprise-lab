@@ -105,7 +105,7 @@ Goal: make troubleshooting fast and make hardening decisions obvious.
 
 **Verify**
 
-`ssh -vvv <user>@VM3
+`ssh -vvv <user>@VM3`
 - What it does: verbose SSH handshake; shows which key was offered, what auth method was used, and why it failed.
 
 `sssctl user-checks <username>`
@@ -122,7 +122,7 @@ Goal: make troubleshooting fast and make hardening decisions obvious.
 **Verify**
 
 `trust list | head`
-- What it does: shows certificate trust stores and anchors (quick sanity check).`
+- What it does: shows certificate trust stores and anchors (quick sanity check).
 
 `openssl s_client -connect <host>:443 -servername <host> </dev/null`
 - What it does: inspects a live TLS endpoint and prints the cert chain.
