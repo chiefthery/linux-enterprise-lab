@@ -50,7 +50,7 @@ Server logs:
 
 Example:
 
-`User user not allowed because none of user's groups are listed in AllowGroups`
+`User not allowed because none of user's groups are listed in AllowGroups`
 
 Group resolution:
 
