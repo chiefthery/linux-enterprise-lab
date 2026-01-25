@@ -6,6 +6,12 @@ It’s written like a runbook: **what I built, how to reproduce it, what broke, 
 
 ---
 
+## Design Philosophy
+
+This lab emphasizes failure-driven learning. Systems are intentionally misconfigured or stressed to simulate real-world incidents, followed by root-cause analysis, remediation, and hardening.
+
+---
+
 ## Goals
 
 - Build a realistic multi-host environment (not a single-VM tutorial)
