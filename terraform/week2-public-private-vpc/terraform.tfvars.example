@@ -1,0 +1,9 @@
+key_name   = "YOUR_KEYPAIR_NAME"
+my_ip_cidr = "x.x.x.x/32"
+
+tags = {
+  Owner       = "Therence"
+  Environment = "lab"
+  CostCenter  = "learning"
+}
+
