@@ -1,5 +1,5 @@
-key_name         = "november232025"
-allowed_ssh_cidr = "REDACTED_IP/32"
+key_name         = "keyname"
+allowed_ssh_cidr = "x.x.x.x/32"
 aws_region       = "us-east-2"
 aws_az           = "us-east-2a"
 project_name     = "week1-iac"
