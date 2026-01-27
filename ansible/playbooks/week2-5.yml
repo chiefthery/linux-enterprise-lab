@@ -1,0 +1,12 @@
+---
+- name: Week 2.5 - Baseline hardening on private hosts
+  hosts: private
+  become: true
+  roles:
+    - baseline
+
+- name: Week 2.5 - Deploy nginx on private hosts
+  hosts: private
+  become: true
+  roles:
+    - nginx
