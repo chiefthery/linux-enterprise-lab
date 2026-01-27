@@ -1,0 +1,35 @@
+---
+- name: Update packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  become: true
+
+- name: Install basic admin tooling
+  ansible.builtin.dnf:
+    name:
+      - vim
+      - git
+      - wget
+      - unzip
+    state: present
+  become: true
+
+- name: Ensure chrony is installed
+  ansible.builtin.dnf:
+    name: chrony
+    state: present
+  become: true
+
+- name: Enable and start chronyd
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true
+  become: true
+
+- name: Ensure curl is available (curl or curl-minimal)
+  ansible.builtin.shell: "command -v curl"
+  register: curl_check
+  changed_when: false
+  failed_when: curl_check.rc != 0
