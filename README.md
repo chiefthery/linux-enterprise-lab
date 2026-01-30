@@ -1,14 +1,24 @@
 # Linux Enterprise Lab (Rocky/RHEL-style)
 
-This repo documents an enterprise-style Linux lab designed to practice **identity, DNS/NTP dependencies, security hardening, and automation** across multiple hosts.
+**Start here:** see **PORTFOLIO.md** for a curated tour of the best architecture, labs, and incident writeups.
 
-It’s written like a runbook: **what I built, how to reproduce it, what broke, and how I fixed it**.
+This repo documents an enterprise-style Linux lab designed to practice **identity, DNS/NTP dependencies, security hardening, observability, and recovery** across multiple hosts.
+
+It’s written like a runbook: **what I built → how to reproduce it → what broke → how I fixed it → how I hardened it.**.
 
 ---
 
 ## Design Philosophy
 
-This lab emphasizes failure-driven learning. Systems are intentionally misconfigured or stressed to simulate real-world incidents, followed by root-cause analysis, remediation, and hardening.
+This lab emphasizes **failure-driven learning.**
+
+Systems are intentionally misconfigured, stressed, or partially broken to simulate real-world incidents, followed by 
+- root-cause analysis
+- remediation
+- prevention
+- documentation
+
+The goal is operational judgment, not just “getting it to work.”
 
 ---
 
@@ -16,17 +26,23 @@ This lab emphasizes failure-driven learning. Systems are intentionally misconfig
 
 - Build a realistic multi-host environment (not a single-VM tutorial)
 - Practice core sysadmin dependencies: **DNS, time sync, identity, SSH, sudo**
-- Layer security controls in a deliberate order (firewall → SSH → auditd → SELinux)
-- Apply automation *after* understanding the underlying system behavior
+- Layer security controls in a deliberate order
+- Apply automation *after* understanding the underlying failure modes
+- Develop incident response and recovery habits
 
 ---
 
 ## Environment Overview
 
-- Hypervisor: (VMware / cloud)  
-- OS family: Rocky Linux 9 / RHEL-like
-- Core pattern: “Known-good base OS” → “Enroll to identity” → “Apply config via Ansible”
 
+- Platform: VMware + AWS
+- OS family: Rocky Linux 9 / RHEL-like
+- Pattern:
+    “Known-good base OS”
+    → “Enroll to identity”
+    → “Harden”
+    → “Observe”
+    → “Automate”
 ---
 
 ## Architecture
@@ -59,27 +75,37 @@ flowchart LR
   C -->|"NTP (chrony)"| D
 ```
 
+See architecture/ for detailed network, identity, and observability designs.
 
+### Repository Structure
+
+| architecture/    | System and network design                | 
+| ---------------- |:----------------------------------------:|
+| labs/            | Reproducible walkthroughs                |
+| troubleshooting/ | Incident reports and root-cause analysis |
+| ansible/         | Automation and configuration management  |
+| references/      | External and companion resources         |
+
+---
 
 ## How to Use This Repo
 
 1) Read the lab index
 
-See labs/00-index.md for the recommended path and prerequisites.
+See labs/00-index.md for the recommended learning sequence.
 
 2) Reproduce the environment (high level)
 
-1. Provision VMs (names + IPs)
+    1. Provision VMs (names + IPs)
+    2. Configure networking + resolvers
+    3. Install/configure FreeIPA + DNS
+    4. Enroll clients (SSSD/Kerberos)
+    5. Apply baseline hardening
+    6. Apply Ansible roles for consistency
 
-2. Configure networking + resolvers
+Each step is documented in `labs/` and `architecture/.`
 
-3. Install/configure FreeIPA + DNS
-
-4. Enroll clients (SSSD)
-
-5. Apply baseline hardening
-
-6. Apply Ansible roles for consistency
+---
 
 ## Security Hardening (layered)
 
@@ -87,7 +113,7 @@ This lab applies controls in layers so failures are debuggable:
 
 1. firewalld baseline
 
-2. sshd hardening (keys only, no root, explicit allowed groups)
+2. SSH hardening (keys only, no root, explicit allowed groups)
 
 3. auditd + rules (make changes observable)
 
@@ -95,27 +121,62 @@ This lab applies controls in layers so failures are debuggable:
 
 5. patch policy (manual cadence + documentation)
 
-See labs/ and troubleshooting/ for details.
+See `labs/` and `troubleshooting/` for details.
+
+---
+
+## Observability and Reliability
+
+Week 3 introduces a full observability and response loop:
+- Prometheus + exporters
+- Alertmanager
+- Webhook automation
+- Ansible remediation
+- Bastion-secured access
+- Private subnet controls
+
+Documented in:
+
+- `architecture/week3-observability.md`
+- `labs/lab-week3-observability.md`
+
+This simulates entry-level SRE / platform engineering workflows.
+
+---
 
 ## Automation (Ansible)
 
-Ansible contents live under ansible/.
+Ansible contents live under `ansible/.`
 
-- ansible/playbooks/ – entry playbooks
+- `playbooks/` – entry workflowss
 
-- ansible/roles/ – reusable roles (common/security/etc.)
+- `roles/` – reusable roles (common/security/etc.)
 
-- ansible/inventory/ – inventory (sanitized example files will be provided)
+- `inventory/` – inventory (sanitized examples)
+
+---
 
 ## What Broke (and Fixes)
 
-This is intentional: debugging is the point.
+Failures are intentional and documented.
 
-- DNS recursion / root hints issues → troubleshooting/dns-root-hints.md
+- SSH Access Blocked by AllowGroups Misconfiguration → `troubleshooting/ssh-hardening-ipa.md`
 
-- Chrony time not synced → troubleshooting/chrony-unsynced.md
+- Chrony Time Drift Causing Authentication Failures → `troubleshooting/chrony-unsynced.md`
 
-- SSH key auth still prompting for password → troubleshooting/ssh-auth-gotchas.md
+- Bastion ProxyJump and SSH Key Selection Failure → `troubleshooting/week2-ssh-proxyjump-key-selection.md`
+
+- Chrony Silent Failure from DNS Bootstrap Errors → `troubleshooting/week2-ntp-dns-bootstrap-failure.md`
+
+---
+
+## Related Repositories
+
+- **Terraform Platform:** See `references/terraform-platform.md` for the dedicated IaC repo.
+
+Additional platform-focused work lives in separate repositories.
+
+---
 
 ## Roadmap (Next)
 
@@ -123,10 +184,14 @@ This is intentional: debugging is the point.
 
 - Centralized logging (rsyslog/journald forwarding)
 
-- Vulnerability scanning workflow + remediation notes
+- Compliance and scanning workflows
 
-- Jenkins/Terraform integration (later phase)
+- Recovery and rebuild drills
+
+- Expanded automation patterns
+
+---
 
 ## Disclaimer
 
-This repo is for learning. Sensitive values (real IPs, passwords, private keys, tokens) are excluded or redacted.
+This repo is for learning. Sensitive values (real IPs, passwords, private keys, tokens) are excluded, redacted, or replaced with examples.
